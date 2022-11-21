@@ -25,7 +25,7 @@ impl<'a> Server<'a> {
             let mut buffer = [0; 200];
             stream.read(&mut buffer).unwrap();
             let req: HttpRequest = String::from_utf8(buffer.to_vec()).unwrap().into();
-            Router::route(req, );
+            Router::route(req, &mut stream);
         }
     }
 

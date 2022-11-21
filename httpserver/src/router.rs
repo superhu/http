@@ -2,7 +2,7 @@ use std::io::Write;
 use http::httprequest;
 use http::httprequest::HttpRequest;
 use http::httpresponse::HttpResponse;
-use crate::handler::{PageNotFoundHandler, StaticHandler, WebServiceHandler};
+use crate::handler::{Handler, PageNotFoundHandler, StaticHandler, WebServiceHandler};
 
 
 pub struct Router;
