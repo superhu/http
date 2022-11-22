@@ -18,7 +18,7 @@ pub trait Handler {
         let public_path = env::var("PUBLIC_PATH").unwrap_or(default_path);
         let full_path = format!("{}/{}", public_path, file_name);
 
-        let content = fs::read_to_string(file_name);
+        let content = fs::read_to_string(full_path);
         content.ok()
     }
 }
@@ -34,7 +34,8 @@ impl Handler for StaticHandler {
             println!("path={}", &path);
             let mut map: HashMap<&str, &str> = HashMap::new();
             map.insert("Content-Type", "text/html");
-            HttpResponse::new("200",Some(map), Self::load_file(path))
+            let response = HttpResponse::new("200", Some(map), Self::load_file("404.html"));
+            response
 
         } }
     }

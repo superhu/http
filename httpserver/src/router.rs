@@ -17,7 +17,11 @@ impl Router {
                         "api" => {
                             let resp: HttpResponse = WebServiceHandler::handle(&req);
                             let _ = resp.send_response(stream);
-                        }
+                        },
+                        "static" => {
+                            let resp: HttpResponse = StaticHandler::handle(&req);
+                            let _ = resp.send_response(stream);
+                        },
                         _ => {
                             let resp: HttpResponse = StaticHandler::handle(&req);
                             let _ = resp.send_response(stream);

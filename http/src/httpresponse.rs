@@ -1,7 +1,5 @@
 use std::collections::HashMap;
-use std::error::Error;
 use std::io::Write;
-use std::thread::sleep;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct HttpResponse<'a> {
@@ -32,7 +30,7 @@ impl<'a> From<HttpResponse<'a>> for String{
             &res.version(),
             &res.status_code(),
             &res.status_text(),
-            &res.body.clone().unwrap().len(),
+            &res.body.clone().unwrap_or("".to_string()).len(),
             &res.headers(),
             &res.body(),
         )
@@ -56,7 +54,7 @@ impl<'a> HttpResponse<'a> {
                 Some(map)
             }
         };
-        response.status_code = match response.status_code {
+        response.status_text = match response.status_code {
             "200" => "OK".into(),
             "400" => "Bad Request".into(),
             "404" => "Not Found".into(),
@@ -71,6 +69,7 @@ impl<'a> HttpResponse<'a> {
     pub fn send_response(&self, write_stream: &mut impl Write) -> Result<(), &'static str> {
         let res = self.clone();
         let response_string = String::from(res);
+        // write_stream.write(response_string.as_bytes()).expect("write fail");
         let _ = write!(write_stream, "{}", response_string);
         Ok(())
     }
