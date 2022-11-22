@@ -14,12 +14,14 @@ pub trait Handler {
     fn handle(req: &HttpRequest) -> HttpResponse;
 
     fn load_file(file_name: &str) -> Option<String> {
-        let default_path = format!("{}/public", env!("CARGO_MANIFEST_DIR"));
+        let default_path = format!("{}\\public", env!("CARGO_MANIFEST_DIR"));
         let public_path = env::var("PUBLIC_PATH").unwrap_or(default_path);
-        let full_path = format!("{}/{}", public_path, file_name);
+        let full_path = format!("{}/{}", "public", file_name);
 
         let content = fs::read_to_string(full_path);
-        content.ok()
+        let option = content.ok();
+        println!("content:{:?}", option);
+        option
     }
 }
 
@@ -34,7 +36,10 @@ impl Handler for StaticHandler {
             println!("path={}", &path);
             let mut map: HashMap<&str, &str> = HashMap::new();
             map.insert("Content-Type", "text/html");
-            let response = HttpResponse::new("200", Some(map), Self::load_file("404.html"));
+
+
+            let body = Self::load_file(&path[8..]);
+            let response = HttpResponse::new("200", Some(map), body);
             response
 
         } }
